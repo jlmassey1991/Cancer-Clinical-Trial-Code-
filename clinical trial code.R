@@ -84,8 +84,12 @@ diagnosis.date <- diagnosis %>%
   arrange(diagnosis_date) %>%
  filter(row_number()==1)
 
-# Group by patient ID, order by date, and filtering by row per first treatment date
-treatment.date <- treatment %>%
+# Merge newly created first diagnosis date DF to the treated DF 
+treatment.date.new <- left_join(diagnosis.date, treatment.date, by = "common_column")
+
+# Among first diagnosis dates : 
+Group by patient ID, order by date, and filtering by row per first treatment date
+treatment.date.new <- treatment %>%
   group_by(patient_id) %>%
   arrange(treatment_date) %>%
 filter(row_number()==1)
