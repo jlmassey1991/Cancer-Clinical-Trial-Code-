@@ -86,8 +86,8 @@ diagnosis.date <- diagnosis %>%
 
 # Join 1st diagnosis date with their treatment date and their cancer types by patient_ID 
 days <- diagnosis.date %>%
-  left_join(diagnosis.type2, by='patient_id') %>%
-  left_join(treatment, by='patient_id')
+  inner_join(diagnosis.type2, by='patient_id') %>%
+  inner_join(treatment, by='patient_id')
 
 # Calculate time to treatment: time = (treatment date - diagnosis date)
 days$days <- as.numeric(as.Date(days$treatment_date, "%m/%d/%y"))-
