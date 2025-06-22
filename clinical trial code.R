@@ -84,21 +84,10 @@ diagnosis.date <- diagnosis %>%
   arrange(diagnosis_date) %>%
  filter(row_number()==1)
 
-# Merge newly created first diagnosis date DF to the treated DF 
-treatment.date.new <- left_join(diagnosis.date, treatment.date, by = "common_column")
-
-# Among first diagnosis dates : 
-Group by patient ID, order by date, and filtering by row per first treatment date
-treatment.date.new <- treatment %>%
-  group_by(patient_id) %>%
-  arrange(treatment_date) %>%
-filter(row_number()==1)
-
-# Join 1st diagnosis date, 1st treatment date, and cancer types by patient_ID
-# NOTE: It appears 1 patient didn't receive treatment 
-days <- diagnosis.type2 %>%
-  left_join(diagnosis.date, by='patient_id') %>%
-  left_join(treatment.date, by='patient_id')
+# Join 1st diagnosis date with their treatment date and their cancer types by patient_ID 
+days <- diagnosis.date %>%
+  left_join(diagnosis.type2, by='patient_id') %>%
+  left_join(treatment, by='patient_id')
 
 # Calculate time to treatment: time = (treatment date - diagnosis date)
 days$days <- as.numeric(as.Date(days$treatment_date, "%m/%d/%y"))-
